@@ -1,0 +1,6 @@
+log/
+tmp/
+.bundle
+.env.*
+Procfile.*
+.byebug_history

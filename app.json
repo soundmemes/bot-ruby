@@ -1,0 +1,9 @@
+{
+  "name": "soundmemesbot",
+  "repository": "https://github.com/vladfaust/soundmemesbot",
+  "scripts": {
+    "dokku": {
+      "predeploy": "bundle exec rake db:migrate"
+    }
+  }
+}
