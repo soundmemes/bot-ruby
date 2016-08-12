@@ -24,13 +24,16 @@ module Apps; module Bot
         options = {
           inline_query_id: @query_id,
           results: @results,
-          cache_time: 0,
         }
 
+        switch_pm_text = ''
+        switch_pm_text += 'Nothing found. ' unless @results.count > 0
+        switch_pm_text += 'Tap to add your own sound.'
+
         options.merge!({
-          switch_pm_text: 'Nothing found. Tap to add your own sound.',
+          switch_pm_text: switch_pm_text,
           switch_pm_parameter: PARAMETER_ADD_NEW,
-        }) unless @results.count > 0
+        })
 
         bot.api.answer_inline_query(options)
       end
