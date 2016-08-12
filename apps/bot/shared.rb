@@ -35,8 +35,14 @@ module Apps; module Bot
   end
 
   module EasyState
-    def user_state
-      @user_state ||= Utils::UserState.new(params[:telegram_user])
+    def self.included(base)
+      base.send :include, InstanceMethods
+    end
+
+    module InstanceMethods
+      def user_state
+        @user_state ||= Utils::UserState.new(params[:telegram_user])
+      end
     end
   end
 end; end
