@@ -68,6 +68,30 @@ module Utils
       end
     end
 
+    def hset(key, value)
+      connect do |c|
+        c.hset(key, value)
+      end
+    end
+
+    def mapped_hmset(key, hash)
+      connect do |c|
+        c.mapped_hmset(key, hash)
+      end
+    end
+
+    def hget(key, field)
+      connect do |c|
+        c.hget(key, field)
+      end
+    end
+
+    def hgetall(key)
+      connect do |c|
+        c.hgetall(key)
+      end
+    end
+
     def self.single_connection
       ENV['REDIS_URL'] ? ::Redis.new(url: ENV['REDIS_URL']) : ::Redis.new
     end

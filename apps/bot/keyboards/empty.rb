@@ -1,5 +1,3 @@
-
-
 module Apps; module Bot
   module Keyboards
     class Empty

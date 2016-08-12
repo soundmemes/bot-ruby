@@ -1,4 +1,4 @@
-require 'telegram/bot'
+  require 'telegram/bot'
 require 'singleton'
 require_relative 'setup'
 

@@ -16,7 +16,7 @@ module Interactors
 
       def call
         if context.query.to_s.length > 0
-          context.sounds = Sound.fetch_by_query(query)
+          context.sounds = Sound.fetch_by_query(context.query)
         else
           context.sounds = Sound.fetch_trending
         end

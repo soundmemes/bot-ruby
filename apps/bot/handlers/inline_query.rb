@@ -9,7 +9,7 @@ module Apps; module Bot
 
         result = Organaizers::FetchSoundsByQuery.call(params)
         if result.success?
-          Responders::InlineSoundResults.new(query_id: params[:message].id, results: result.sounds)
+          Responders::InlineSoundResults.new(query_id: params[:message].id, results: result.sounds).respond!
         else
           raise Exception.new('Unhandled result failure!')
         end

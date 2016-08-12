@@ -1,6 +1,9 @@
 module Apps; module Bot
   module Handlers
     class ChosenInlineResult
+      include Shared
+      include EasyCallable
+
       def call
         params.merge!({
           sound_id: params[:message].result_id,

@@ -1,7 +1,7 @@
 module Apps; module Bot
   module Keyboards
     class MainMenu
-      BUTTON_ADD_NEW = '➕ Add new sound'
+      BUTTON_ADD_NEW = 'Add a new sound'
 
       attr_reader :markup
 

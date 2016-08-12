@@ -16,12 +16,12 @@ $logger = Utils::Logger.new(
 
 require_relative 'config/environment'
 
-require 'resque/server'
-require 'resque/scheduler/server'
+# require 'resque/server'
+# require 'resque/scheduler/server'
 
 puts "[#{ Process.pid }] * Loaded in #{ ENV['RACK_ENV'] } environment in #{ ((Time.now - started_at) * 1000).floor }ms!"
 
 run Rack::URLMap.new(
-  '/resque' => Resque::Server.new.freeze,
+  # '/resque' => Resque::Server.new.freeze,
   '/' => proc { [200, {}, ["418 I'm a teapot"]] }
 )

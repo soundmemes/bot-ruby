@@ -1,22 +1,22 @@
 module Apps; module Bot
   module Responders
     class InlineSoundResults
+      include Shared
+
+      PARAMETER_ADD_NEW = 'add_from_inline'.freeze
+
       def initialize(query_id: nil, results: [])
         @query_id = query_id || (raise ArgumentError.new('query_id is nil!'))
         @results = results.map do |sound|
-          if sound.file_id
-            Telegram::Bot::Types::InlineQueryResultCachedVoice.new(
-              type: 'voice',
-              id: sound.id,
-              voice_file_id: sound.file_id,
-              title: sound.title,)
-          else
-            Telegram::Bot::Types::InlineQueryResultVoice.new(
-              type: 'voice',
-              id: sound.id,
-              voice_url: 'TODO',
-              title: sound.title,)
-          end
+          title = sound.title
+          # title += " | #{ sound.tags.map{ |tag| "##{ tag.content }" }.join(' ') }" if sound.tags.count > 0
+
+          Telegram::Bot::Types::InlineQueryResultCachedVoice.new(
+            type: 'voice',
+            id: sound.id,
+            voice_file_id: sound.file_id,
+            title: title,
+          )
         end
       end
 
@@ -24,11 +24,12 @@ module Apps; module Bot
         options = {
           inline_query_id: @query_id,
           results: @results,
+          cache_time: 0,
         }
 
         options.merge!({
           switch_pm_text: 'Nothing found. Tap to add your own sound.',
-          switch_pm_parameter: 'add_from_inline',
+          switch_pm_parameter: PARAMETER_ADD_NEW,
         }) unless @results.count > 0
 
         bot.api.answer_inline_query(options)

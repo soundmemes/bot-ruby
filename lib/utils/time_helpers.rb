@@ -4,6 +4,10 @@ module Utils
       "#{ (time * 1000.0).floor }ms"
     end
 
+    def self.to_sec(time)
+      "#{ (time).round(2) }s"
+    end
+
     T_0_SECONDS = 0.freeze
     T_1_SECOND = 1.freeze
     T_2_SECONDS = 2.freeze

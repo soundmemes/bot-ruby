@@ -1,7 +1,13 @@
 module Apps; module Bot
   module Shared
-    def bot
-      Bot.instance.bot
+    def self.included(base)
+      base.send :include, InstanceMethods
+    end
+
+    module InstanceMethods
+      def bot
+        Bot.instance.bot
+      end
     end
   end
 
