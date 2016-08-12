@@ -7,7 +7,7 @@ module Apps; module Bot
 
       def initialize(query_id: nil, results: [])
         @query_id = query_id || (raise ArgumentError.new('query_id is nil!'))
-        @results = results.map do |sound|
+        @results = results.first(49).map do |sound|
           title = sound.title
           # title += " | #{ sound.tags.map{ |tag| "##{ tag.content }" }.join(' ') }" if sound.tags.count > 0
 
