@@ -25,17 +25,13 @@ module Interactors
 
       def call
         context.replace_file_id = case context.mime_type
-        when 'audio/mpeg' # Audio
+        when %r{audio/.*} # Audio
+          bot.api.send_chat_action(
+            chat_id: context.telegram_user.id,
+            action: 'upload_audio'
+          )
           context.file = file_id_to_converted_file(context.file_id)
           true
-        when 'audio/x-vorbis+ogg' # Audio
-          context.file = file_id_to_converted_file(context.file_id)
-          true
-        when 'audio/x-wav' # Document
-          context.file = file_id_to_converted_file(context.file_id)
-          true
-        when 'audio/ogg' # Voice
-          false
         else
           raise InvalidMimeTypeError
         end
@@ -57,8 +53,6 @@ module Interactors
         context.fail!(error: :invalid_mime_type)
 
       end
-
-      private
 
       def file_id_to_converted_file(file_id)
         input = file_id_to_file(file_id)
@@ -102,7 +96,7 @@ module Interactors
       end
 
       def bot
-        @bot ||= Apps::Bot::Bot.instance.bot
+        @bot ||= Telegram::Bot::Client.new(ENV['BOT_API_TOKEN'])
       end
 
       class InvalidMimeTypeError < StandardError; end
