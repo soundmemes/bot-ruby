@@ -15,6 +15,23 @@ module Apps; module Bot
           parse_mode: 'Markdown',
           reply_markup: Keyboards::MainMenu.new.markup,
         )
+
+        if @is_new
+          sound = Sound[Settings::HELLO_SOUND_ID]
+
+          bot.api.send_message(
+            chat_id: @user.id,
+            text: "This is my traditional *Hello world* message. Please, tap `Share` button below the sound to see how it works.\n\*Tip:* Type /help to learn more about my capabilities 😊",
+            parse_mode: 'Markdown',
+            reply_markup: Keyboards::MainMenu.new.markup,
+          )
+
+          bot.api.send_voice(
+            chat_id: @user.id,
+            voice: sound.file_id,
+            reply_markup: Keyboards::BeneathNewSound.new(query: sound.title).markup,
+          )
+        end
       end
     end
   end
