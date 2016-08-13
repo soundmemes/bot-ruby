@@ -19,7 +19,7 @@ module Apps; module Bot
 
           when :content
             if params[:content]
-              if params[:content][:mime_type].match(%r{audio/.*})
+              if params[:content][:mime_type].match(%r{audio/.*}) || params[:content][:mime_type].match(%r{.*/ogg})
                 user_state.merge_params_with(
                   file_id: params[:content][:file_id],
                   mime_type: params[:content][:mime_type])

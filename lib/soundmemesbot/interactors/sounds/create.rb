@@ -26,7 +26,7 @@ module Interactors
 
       def call
         context.replace_file_id = case context.mime_type
-        when %r{audio/.*} # Audio
+        when %r{audio/.*}, %r{.*/ogg} # Audio
           bot.api.send_chat_action(
             chat_id: context.telegram_user.id,
             action: 'upload_audio'
