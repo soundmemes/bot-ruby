@@ -5,11 +5,13 @@ module Apps; module Bot
 
       PARAMETER_ADD_NEW = 'add_from_inline'.freeze
 
-      def initialize(query_id: nil, results: [])
+      def initialize(query_id: nil, results: [], trending: false)
         @query_id = query_id || (raise ArgumentError.new('query_id is nil!'))
         @results = results.first(49).map do |sound|
           title = sound.title
-          # title += " | #{ sound.tags.map{ |tag| "##{ tag.content }" }.join(' ') }" if sound.tags.count > 0
+          usages = sound.choices.count
+          title += " (#{ usages } usage#{ usages == 1 ? nil : 's' } #{ trending ? 'today' : 'total' })"
+          title += " #{ sound.tags.map{ |tag| "##{ tag.content }" }.join(' ') }" if sound.tags.count > 0
 
           Telegram::Bot::Types::InlineQueryResultCachedVoice.new(
             type: 'voice',
@@ -24,11 +26,10 @@ module Apps; module Bot
         options = {
           inline_query_id: @query_id,
           results: @results,
+          next_offset: (@results.count if @results.count > 0),
         }
 
-        switch_pm_text = ''
-        switch_pm_text += 'Nothing found. ' unless @results.count > 0
-        switch_pm_text += 'Tap to add your own sound.'
+        switch_pm_text = 'Tap here to add your own sound.'
 
         options.merge!({
           switch_pm_text: switch_pm_text,

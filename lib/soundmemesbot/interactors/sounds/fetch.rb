@@ -9,6 +9,7 @@ module Interactors
       #
       # @params
       #   query [String] (Optional)
+      #   offset [Integer] (Optional)
       #
       # @return
       #   sounds [Array<Sound>]
@@ -16,9 +17,9 @@ module Interactors
 
       def call
         if context.query.to_s.length > 0
-          context.sounds = Sound.fetch_by_query(context.query)
+          context.sounds = Sound.fetch_by_query(context.query, offset: context.offset)
         else
-          context.sounds = Sound.fetch_trending
+          context.sounds = Sound.fetch_trending(offset: context.offset)
         end
       end
     end
