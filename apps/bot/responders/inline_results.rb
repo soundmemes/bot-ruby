@@ -5,8 +5,9 @@ module Apps; module Bot
 
       PARAMETER_ADD_NEW = 'add_from_inline'.freeze
 
-      def initialize(query_id: nil, results: [], trending: false)
+      def initialize(query_id: nil, results: [], trending: false, offset: nil)
         @query_id = query_id || (raise ArgumentError.new('query_id is nil!'))
+        @offset = offset
         @results = results.first(49).map do |sound|
           title = sound.title
           usages = sound.choices.count
@@ -26,7 +27,7 @@ module Apps; module Bot
         options = {
           inline_query_id: @query_id,
           results: @results,
-          next_offset: (@results.count if @results.count > 0),
+          next_offset: @offset,
         }
 
         switch_pm_text = 'Tap here to add your own sound.'
