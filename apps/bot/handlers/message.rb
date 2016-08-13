@@ -39,6 +39,9 @@ module Apps; module Bot
             Actions::Start.call(params)
           end
 
+        when '/help'
+          Responders::Help.new(user: params[:telegram_user]).respond!
+
         when Keyboards::MainMenu::BUTTON_ADD_NEW, '/new'
           prepare_for_new_sound
 
