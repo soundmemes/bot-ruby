@@ -21,7 +21,7 @@ module Apps; module Bot
         def respond!
           bot.api.send_message(
             chat_id: options[:user].id,
-            text: "Success! ✨ The sound will now appear in inline search results. You may share it directly with your friends.\n\n*Reminder:* To use the inline mode, just type `@#{ ENV['BOT_USERNAME'] } #{ @options[:title] }` or `@#{ ENV['BOT_USERNAME'] } SOME TAG` in *any* chat!",
+            text: "Success! ✨ The sound will now appear in inline search results. You may share it directly with your friends.\n\n*Reminder:* To use the inline mode, just type `@#{ ENV['BOT_USERNAME'] }` in *any* chat!",
             parse_mode: 'Markdown',
             reply_markup: Keyboards::MainMenu.new.markup,
           )
@@ -32,6 +32,14 @@ module Apps; module Bot
             chat_id: options[:user].id,
             voice: input,
             reply_markup: Keyboards::BeneathNewSound.new(query: options[:title]).markup,
+          )
+
+          bot.api.send_message(
+            chat_id: options[:user].id,
+            text: "❤️ *me?* So give me a 5 stars feedback here: https://telegram.me/storebot?start=soundmemesbot\n💔 *me?* Tell why in @soundmemes chat 🤔",
+            disable_web_page_preview: true,
+            parse_mode: 'Markdown',
+            reply_markup: Keyboards::MainMenu.new.markup,
           )
 
           response['result']&.[]('voice')&.[]('file_id')

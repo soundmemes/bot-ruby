@@ -17,7 +17,7 @@ class Sound < Sequel::Model(:sounds)
   #   query [String]
   #   @option [Boolean] :order_by_choices_count (true)
   #
-  def self.fetch_by_query(query, order_by_choices_count: true, offset: nil)
+  def self.fetch_by_query(query, order_by_choices_count: true, offset: nil, limit: Settings::MAX_QUERY_RESULTS)
     # Original full query
     #
     # SELECT
@@ -48,6 +48,7 @@ class Sound < Sequel::Model(:sounds)
     q = q.eager(:choices).association_left_join(:choices).group_by(:sounds__id).order{ count(:choices__id).desc } if order_by_choices_count
 
     q = q.offset(offset) if offset
+    q = q.limit(limit) if limit
 
     q.all
   end
@@ -57,10 +58,11 @@ class Sound < Sequel::Model(:sounds)
   # @params
   #   @option [Integer] :time (86400) A period to measure trends (defaults to 24 hours)
   #
-  def self.fetch_trending(time: 24 * 60 * 60, offset: nil)
+  def self.fetch_trending(time: 24 * 60 * 60, offset: nil, limit: Settings::MAX_QUERY_RESULTS)
     q = Sound.eager(:choices).eager(:tags).select_all(:sounds).association_left_join(:choices).where{ choices__created_at >= Time.at(Time.now.to_i - time) }.or(choices__id: nil).group_by(:sounds__id).order{ count(:choices__id).desc }
 
     q = q.offset(offset) if offset
+    q = q.limit(limit) if limit
 
     q.all
   end
