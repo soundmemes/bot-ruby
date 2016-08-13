@@ -20,6 +20,10 @@ module Utils
     def initialize
       options = {
         max_connections: ENV['MAX_DB_CONNECTIONS'].to_i | DEFAULT_POOL_SIZE,
+        loggers: [Utils::Logger.new(
+          name: 'SQL',
+          level: %w(test development).include?(ENV['RACK_ENV']) ? ::MonoLogger::DEBUG : ::MonoLogger::WARN
+        )]
       }
 
       @db = Sequel.connect(ENV['DATABASE_URL'], options)
