@@ -19,7 +19,8 @@ module Interactors
       # @return
       #   sound [Sound]
       #   tags [Array<Tag>]
-      #   file [File] (Optional) A file that should be send to retreive a new telegram's file_id
+      #   file [File] A file that should be send to retreive a new telegram's file_id
+      #   file_size [Integer] A size of newwly created file in bytes
       #   replace_file_id [Boolean] Whether does this sound needs its file_id to be replaced with a new one
       #
 
@@ -38,7 +39,6 @@ module Interactors
 
         context.sound = Sound.create(
           uploader: context.user,
-          file_id: (context.file_id unless context.needs_new_file_id),
           title: context.title,
         )
 
@@ -51,6 +51,9 @@ module Interactors
 
       rescue InvalidMimeTypeError
         context.fail!(error: :invalid_mime_type)
+
+      rescue ConversionError
+        context.fail!(error: :conversion_error)
 
       end
 
@@ -76,6 +79,7 @@ module Interactors
         $logger.info("Starting conversion of #{ input_file_path } (#{ (File.size(input_file_path).to_f / 10 ** 3).round(1) } kB)")
         started_at = Time.now
         `ffmpeg -v quiet -t #{ Settings::MAX_SOUND_DURATION } -i #{ input_file_path } -ar 48000 -ac 1 -acodec libopus -ab 128k #{ output_path }`
+        raise ConversionError unless File.size(output_path) > 0
         $logger.info("Converted to #{ output_path } (#{ (File.size(output_path).to_f / 10 ** 3).round(1) } kB) in #{ Utils::TimeHelpers.to_sec(Time.now - started_at) }")
         output_path
       end
@@ -100,6 +104,7 @@ module Interactors
       end
 
       class InvalidMimeTypeError < StandardError; end
+      class ConversionError < StandardError; end
     end
   end
 end
