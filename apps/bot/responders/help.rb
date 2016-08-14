@@ -35,6 +35,11 @@ If you have any more questions - welcome to my fans' group @soundmemeschat. If y
           disable_web_page_preview: true,
           reply_markup: Keyboards::BeneathHelp.new.markup,
         )
+
+        bot.api.send_document(
+          chat_id: @user.id,
+          document: Settings::MAGIC_GIF_FILE,
+        )
       end
     end
   end

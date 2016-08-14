@@ -3,4 +3,5 @@ module Settings
   ONLY_ADMIN_ADD_SOUND = false
   MAX_QUERY_RESULTS = 50.freeze
   HELLO_SOUND_ID = 32.freeze # John Cena!
+  MAGIC_GIF_FILE = 'BQADAgADHAYAAitYbwAB3RefDXK4BxcC' # Thanks to Никита Кабаков (@metalnakls)
 end
