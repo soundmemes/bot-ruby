@@ -3,20 +3,24 @@ module Apps; module Bot
     class BeneathHelp
       attr_reader :markup
 
-      def initialize(query: nil)
+      RATE_URL = 'https://telegram.me/storebot?start=soundmemesbot'.freeze
+      GROUP_URL = 'https://telegram.me/soundmemeschat'.freeze
+      CHANNEL_URL = 'https://telegram.me/soundmemes'.freeze
+
+      def initialize(user: nil, query: nil)
         keyboard = [
           Telegram::Bot::Types::InlineKeyboardButton.new(
             text: 'Rate ⭐️⭐️⭐️⭐️⭐️',
-            url: 'https://telegram.me/storebot?start=soundmemesbot',
+            url: user ? Botan.shorten_url(user.id, RATE_URL) : RATE_URL,
           ),
           [
             Telegram::Bot::Types::InlineKeyboardButton.new(
               text: 'Join group',
-              url: 'https://telegram.me/soundmemeschat',
+              url: user ? Botan.shorten_url(user.id, GROUP_URL) : GROUP_URL,
             ),
             Telegram::Bot::Types::InlineKeyboardButton.new(
               text: 'Join channel',
-              url: 'https://telegram.me/soundmemes',
+              url: user ? Botan.shorten_url(user.id, CHANNEL_URL) : CHANNEL_URL,
             ),
           ]
         ]

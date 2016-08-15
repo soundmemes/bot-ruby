@@ -21,6 +21,8 @@ module Apps; module Bot
               title:     result.title,
             ).respond!['result']&.[]('voice')&.[]('file_id')
 
+            Botan.track(params[:telegram_user].id, { mime_type: result.mime_type }, 'sound_added')
+
             if result.replace_file_id
               raise "No file_id was returned!" unless new_file_id
 
@@ -31,6 +33,7 @@ module Apps; module Bot
             File.delete(result.file) if result.file
           elsif result.error == :invalid_mime_type
             $logger.error(":invalid_mime_type error!")
+            Botan.track(params[:telegram_user].id, { error: { invalid_mime_type: result.mime_type } }, 'add_new_sound_error')
 
             user_state.reset
             Errors::AddNewSound::InvalidMimeType.new(params[:telegram_user]).send!
@@ -38,6 +41,7 @@ module Apps; module Bot
 
           elsif result.error == :conversion_error
             $logger.error(":conversion_error!")
+            Botan.track(params[:telegram_user].id, { error: 'conversion_error' }, 'add_new_sound_error')
 
             user_state.reset
             Errors::AddNewSound::ConversionError.new(params[:telegram_user]).send!
@@ -49,6 +53,7 @@ module Apps; module Bot
           end
         rescue Telegram::Bot::Exceptions::ResponseError => e
           $logger.warn("HANDLED: #{ e.message } at #{ e.backtrace.join("\n") }")
+          Botan.track(params[:telegram_user].id, { error: 'unknown' }, 'add_new_sound_error')
 
           user_state.reset
 

@@ -19,6 +19,7 @@ module Apps; module Bot
             Actions::AddNewSound::Parse.call(params)
           end
         else # When a completely unknown command
+          Botan.track(params[:telegram_user].id, { text: params[:message].text }, 'unknown_command')
           Errors::DoNotUnderstand.new(params[:telegram_user]).send!
         end
       end

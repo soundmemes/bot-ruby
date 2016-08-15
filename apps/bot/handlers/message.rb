@@ -31,18 +31,28 @@ module Apps; module Bot
         case params[:message].text
         when /^\/start(?:\s(\w+))?$/
           parameter = $1.to_s
+
           case parameter
           when Responders::InlineSoundResults::PARAMETER_ADD_NEW
+            Botan.track(params[:telegram_user].id, { from: 'inline' }, 'start')
+            Botan.track(params[:telegram_user].id, { from: 'inline' }, 'add_new_sound')
             prepare_for_new_sound
 
           else # When just a /start or with unknown parameter
+            Botan.track(params[:telegram_user].id, { from: '/start' }, 'start')
             Actions::Start.call(params)
           end
 
         when '/help'
+          Botan.track(params[:telegram_user].id, {}, 'help_request')
           Responders::Help.new(user: params[:telegram_user]).respond!
 
-        when Keyboards::MainMenu::BUTTON_ADD_NEW, '/new'
+        when Keyboards::MainMenu::BUTTON_ADD_NEW
+          Botan.track(params[:telegram_user].id, { from: 'button' }, 'add_new_sound')
+          prepare_for_new_sound
+
+        when '/new'
+          Botan.track(params[:telegram_user].id, { from: '/new' }, 'add_new_sound')
           prepare_for_new_sound
 
         when '/skip'
@@ -54,6 +64,7 @@ module Apps; module Bot
 
         when '/cancel', '/abort'
           if user_state.get == Utils::UserState::STATE_ADDING_NEW_SOUND
+            Botan.track(params[:telegram_user].id, {}, 'sound_adding_cancelled')
             Actions::AddNewSound::Cancel.call(params)
           else
             # 'Nothing to cancel' message

@@ -33,13 +33,13 @@ If you cannot find what you're looking for - tap an `Add new` button in inline m
 If you have any more questions - welcome to my fans' group @soundmemeschat. If you want to stay updated with news and cool new sounds - check out my channel @soundmemes. Also you're welcome to give me 5 stars in `@storebot`:",
           parse_mode: 'Markdown',
           disable_web_page_preview: true,
-          reply_markup: Keyboards::BeneathHelp.new.markup,
+          reply_markup: Keyboards::BeneathHelp.new(user: @user).markup,
         )
 
         bot.api.send_document(
           chat_id: @user.id,
           document: Settings::MAGIC_GIF_FILE,
-        )
+        ) if ENV['RACK_ENV'] == 'production'
       end
     end
   end

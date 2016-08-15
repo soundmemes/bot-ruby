@@ -30,7 +30,3 @@ end
 group :development, :staging, :production do
   gem 'puma'
 end
-
-group :staging, :production do
-
-end

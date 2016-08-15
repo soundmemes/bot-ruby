@@ -1,6 +1,7 @@
-  require 'telegram/bot'
+require 'telegram/bot'
 require 'singleton'
 require_relative 'setup'
+require_relative '../../lib/botan'
 
 module Apps
   module Bot
