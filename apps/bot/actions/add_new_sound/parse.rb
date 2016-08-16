@@ -11,8 +11,12 @@ module Apps; module Bot
 
           case current_phaze
           when :title
-            if params[:title].to_s.length >= MIN_TITLE_LENGTH
-              user_state.merge_params_with(title: params[:title])
+            title = params[:title].to_s
+              .gsub(Regexp.union(Settings::RESTRICTED_TITLE_SYMBOLS), '')
+              .gsub(/\s+/, ' ')
+              .strip
+            if title.length >= MIN_TITLE_LENGTH
+              user_state.merge_params_with(title: title)
             else
               return Errors::AddNewSound::TitleTooShort.new(params[:telegram_user], min_length: MIN_TITLE_LENGTH).send!
             end
@@ -31,8 +35,12 @@ module Apps; module Bot
             end
 
           when :tags
-            if params[:tags].to_s.length > 0
-              user_state.merge_params_with(tags: params[:tags])
+            tags = params[:tags].to_s
+              .gsub(Regexp.union(Settings::RESTRICTED_TAG_SYMBOLS), '')
+              .gsub(/\s+/, ' ')
+              .strip
+            if tags.length > 0
+              user_state.merge_params_with(tags: tags)
             else
               return Errors::AddNewSound::TagsTooShort.new(params[:telegram_user]).send!
             end

@@ -14,6 +14,9 @@ class User < Sequel::Model(:users)
   one_to_many :sounds
   one_to_many :choices
 
+  plugin :pg_array_associations
+  pg_array_to_many :saved_sounds, uniq: true, class: :Sound
+
   ##
   # Telegram
   #

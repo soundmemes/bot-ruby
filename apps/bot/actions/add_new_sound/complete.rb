@@ -7,7 +7,7 @@ module Apps; module Bot
         include EasyState
 
         def call
-          merged = user_state.get_params.select{ |k, v| %i(file_id mime_type file title).include?(k) }
+          merged = user_state.get_params.select{ |k, v| %i(file_id mime_type file title tags).include?(k) }
           result = Organaizers::CreateSound.call(params.merge(merged))
           if result.success?
             user_state.reset
@@ -19,6 +19,8 @@ module Apps; module Bot
               file:      result.file,
               send_file: result.replace_file_id,
               title:     result.title,
+              sound_id:  result.sound.id,
+              tags:      result.sound.tags,
             ).respond!['result']&.[]('voice')&.[]('file_id')
 
             Botan.track(params[:telegram_user].id, { mime_type: result.mime_type }, 'sound_added')

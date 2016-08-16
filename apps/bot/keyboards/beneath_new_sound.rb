@@ -3,12 +3,18 @@ module Apps; module Bot
     class BeneathNewSound
       attr_reader :markup
 
-      def initialize(query: nil)
+      def initialize(query: nil, sound_id: nil)
         keyboard = [
-          Telegram::Bot::Types::InlineKeyboardButton.new(
-            text: 'Share',
-            switch_inline_query: query
-          ),
+          [
+            Telegram::Bot::Types::InlineKeyboardButton.new(
+              text: '💾 Save sound',
+              callback_data: "save_sound:#{ sound_id }",
+            ),
+            Telegram::Bot::Types::InlineKeyboardButton.new(
+              text: 'Share',
+              switch_inline_query: query
+            ),
+          ],
         ]
 
         @markup = Telegram::Bot::Types::InlineKeyboardMarkup.new(

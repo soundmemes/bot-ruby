@@ -10,8 +10,6 @@ module Apps; module Bot
           query: params[:message].query
         })
 
-        Botan.track(params[:telegram_user].id, { query: params[:query], sound: Sound[params[:sound_id]].title }, 'sound_chosen')
-
         result = Organaizers::RecordSoundChoice.call(params)
         if result.failure?
           if result.error == :sound_not_found
@@ -20,6 +18,8 @@ module Apps; module Bot
           else
             raise Exception.new('Unhandled result failure!')
           end
+        else
+          Botan.track(params[:telegram_user].id, { query: params[:query], sound: result.sound.title }, 'sound_chosen')
         end
       end
     end

@@ -39,13 +39,17 @@ module Interactors
 
         context.sound = Sound.create(
           uploader: context.user,
-          title: context.title,
+          title: context.title.strip,
         )
 
-        context.tags = context.tags&.gsub(/,([^\s])/, ", #{ $1 }")&.split(', ')&.map do |tag_content|
+        context.tags = context.tags&.split(',')&.map(&:strip)&.map do |tag_content|
+          next nil unless tag_content.strip.length > 0
+
           tag = Tag.find_or_create(content: tag_content)
           context.sound.add_tag(tag)
+          tag
         end
+        context.tags&.compact!
 
         context.sound.save_changes
 
