@@ -6,7 +6,7 @@ module Apps; module Bot
       def initialize(sound_id: nil)
         keyboard = [
           Telegram::Bot::Types::InlineKeyboardButton.new(
-            text: '💾 Save sound',
+            text: '⭐️ Add to fav',
             callback_data: "save_sound:#{ sound_id }",
           ),
         ]

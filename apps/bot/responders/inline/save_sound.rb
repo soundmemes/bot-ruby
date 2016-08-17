@@ -4,7 +4,7 @@ module Apps; module Bot
       class SaveSound
         include Shared
 
-        TITLE_STRIP_AT = 30.freeze
+        TITLE_STRIP_AT = 20.freeze
 
         def initialize(callback_query_id: nil, saved: nil, title: nil)
           @callback_query_id = callback_query_id
@@ -14,9 +14,9 @@ module Apps; module Bot
 
         def respond!
           text = if @saved
-            "💾 \"#{ strip_title }\" saved!"
+            "⭐️ \"#{ strip_title }\" added to favorites"
           else
-            "🚫 \"#{ strip_title }\" unsaved!"
+            "🚫 \"#{ strip_title }\" removed from favorites"
           end
 
           begin

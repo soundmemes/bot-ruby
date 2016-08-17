@@ -8,7 +8,7 @@ module Apps; module Bot
       def initialize(query_id: nil, query: nil, results: [], saved_sound_ids: [], offset: nil)
         @query_id = query_id
         @results = results.first(49).map do |sound| # TODO 49
-          title = "#{ '💾 ' if saved_sound_ids.include?(sound.id) }#{ sound.title }"
+          title = "#{ '⭐️ ' if saved_sound_ids.include?(sound.id) }#{ sound.title }"
 
           Telegram::Bot::Types::InlineQueryResultCachedVoice.new(
             type: 'voice',
