@@ -47,7 +47,7 @@ module Apps; module Bot
           Botan.track(params[:telegram_user].id, {}, 'help_request')
           Responders::Help.new(user: params[:telegram_user]).respond!
 
-        when Keyboards::MainMenu::BUTTON_ADD_NEW
+        when Keyboards::MainMenu::BUTTON_ADD_NEW, 'Add a new sound'
           Botan.track(params[:telegram_user].id, { from: 'button' }, 'add_new_sound')
           prepare_for_new_sound
 
