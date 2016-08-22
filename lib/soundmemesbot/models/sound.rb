@@ -69,8 +69,6 @@ class Sound < Sequel::Model(:sounds)
     q = Sound
       .select_all(:sounds)
       .association_left_join(:choices)
-      .where{ choices__created_at >= Time.at(Time.now.to_i - time) }
-      .or(choices__id: nil)
       .group_by(:sounds__id)
       .order{ count(:choices__id).desc }
 
