@@ -42,5 +42,10 @@ module Botan
     $logger.debug("Botan.io: Shortened to #{ res.body }")
 
     res.body
+
+  rescue StandardError => e
+    $logger.error("Botan.io: HTTP Request failed (#{ e.message })!")
+
+    url # return original URL
   end
 end
