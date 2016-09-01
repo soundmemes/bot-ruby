@@ -7,6 +7,8 @@ module Botan
   SHORTENER_URI_TEMPLATE = 'https://api.botan.io/s/?token=%{token}&url=%{original_url}&user_ids=%{uid}'
 
   def self.track(uid, message, name = 'Message')
+    return true
+
     begin
       uri = URI(TRACK_URI_TEMPLATE % { token: ENV["BOTANIO_TOKEN"], uid: uid, name: name })
       $logger.debug("Botan.io: sending tracking info to #{ uri }")
@@ -30,6 +32,8 @@ module Botan
   end
 
   def self.shorten_url(uid, url)
+    return url
+
     uri = URI(SHORTENER_URI_TEMPLATE % { token: ENV['BOTANIO_TOKEN'], uid: uid, original_url: url })
     $logger.debug("Botan.io: shortening #{ url }")
 
