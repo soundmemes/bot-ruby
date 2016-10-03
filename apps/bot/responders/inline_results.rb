@@ -9,12 +9,14 @@ module Apps; module Bot
         @query_id = query_id
         @results = results.first(49).map do |sound| # TODO 49
           title = "#{ '⭐️ ' if saved_sound_ids.include?(sound.id) }#{ sound.title }"
+          caption = "#{ sound.tags.map(&:content).join(', ') }"[0, 200]
 
           Telegram::Bot::Types::InlineQueryResultCachedVoice.new(
             type: 'voice',
             id: sound.id,
             voice_file_id: sound.file_id,
             title: title,
+            caption: caption,
             reply_markup: Keyboards::BeneathPostedSound.new(sound_id: sound.id).markup,
           )
         end
