@@ -10,4 +10,7 @@ require_relative 'utils/redis'
 $redis = Utils::Redis.new
 Resque.redis = Utils::Redis.single_connection
 
+require 'interactor'
+module Interactors; end
+
 Dir["#{ __dir__ }/soundmemesbot/**/*.rb"].each { |file| require file }

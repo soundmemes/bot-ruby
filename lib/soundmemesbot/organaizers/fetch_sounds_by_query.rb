@@ -1,4 +1,5 @@
-require 'interactor'
+require_relative '../interactors/users/find_or_create'
+require_relative '../interactors/sounds/fetch'
 
 module Organaizers
   class FetchSoundsByQuery
