@@ -3,6 +3,24 @@ require 'singleton'
 require_relative 'setup'
 require_relative '../../lib/botan'
 
+class Telegram::Bot::Client
+  def fetch_updates
+    response = api.getUpdates(offset: offset, timeout: timeout)
+    return unless response['ok']
+
+    response['result'].each do |data|
+      update = Telegram::Bot::Types::Update.new(data)
+      @offset = update.update_id.next
+      message = extract_message(update)
+      return unless message
+      log_incoming_message(message)
+      yield message
+    end
+  rescue Faraday::Error::TimeoutError
+    retry
+  end
+end
+
 module Apps
   module Bot
     class Bot
@@ -17,6 +35,7 @@ module Apps
       end
 
       def run
+        @bot.api.set_webhook
         @bot.listen do |message|
           begin
             params = {
@@ -66,7 +85,7 @@ module Apps
         #
         when 500..599
           sleep SLEEP_BEFORE_RESTART
-          run
+          retry
 
         # Usually 409 means that someone else is long polling
         when 409
