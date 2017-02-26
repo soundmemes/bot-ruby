@@ -35,12 +35,12 @@ module Apps; module Bot
 
         switch_pm_text, param = if @query.length > 0
           if @results.count > 0
-            ["🔎 Results for \"#{ @query }\":", nil]
+            ["🔎 Results for \"#{ @query }\":", 'nil']
           else
             ['⚠️ Nothing found! Tap to add a new sound', PARAMETER_ADD_NEW]
           end
         else
-          ['🔥 Popular sounds:', nil]
+          ['🔥 Popular sounds:', 'nil']
         end
 
         options.merge!({
